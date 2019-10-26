@@ -1,0 +1,112 @@
+---
+title: "Body Mass Measurement"
+author: "Riya Minesh Amin"
+date: "8/30/2019"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+
+#The internal structure of the data was first checked with str(). This showed the data was in the form 'data.frame' with 507 observations of 25 variables. Data types consist of num and int. The categories male (m) and female (f) has been given the int values 1 and 0, respectively.
+
+```{r}
+ library(readxl)
+ bdims_csv <- read_excel("D:/bdims.csv.xlsx")
+ View(bdims_csv)
+ str(bdims_csv)
+```
+
+```{r}
+#Confirming rows 2 till 248 are males (1), while rows 249 till 507 are female (0).
+bdims_csv$sex[c(1,247,248,507)]
+table(bdims_csv$sex[2:247])
+table(bdims_csv$sex[248:507])
+
+```
+
+#Summary Statistics
+#Mean (All, Male, Female)
+```{r}
+mean(bdims_csv$che.de)
+mean(bdims_csv$che.de[1:247])
+mean(bdims_csv$che.de[248:507])
+```
+#Median (All, Male, Female)
+```{r}
+median(bdims_csv$che.de)
+median(bdims_csv$che.de[1:248])
+median(bdims_csv$che.de[249:507])
+```
+
+#Range (All, Male, Female) - Gives min and max
+```{r}
+range(bdims_csv$che.de)
+range(bdims_csv$che.de[1:247])
+range(bdims_csv$che.de[248:507])
+```
+#Varience (All, Male, Female)
+```{r}
+var(bdims_csv$che.de)
+var(bdims_csv$che.de[1:247])
+var(bdims_csv$che.de[248:507])
+```
+#Standard Deviation (All, Male, Female)
+```{r}
+sd(bdims_csv$che.de)
+sd(bdims_csv$che.de[1:247])
+sd(bdims_csv$che.de[248:507])
+```
+
+#Quartile (All, Male, Female)
+```{r}
+quantile(bdims_csv$che.de)
+quantile(bdims_csv$che.de[1:247])
+quantile(bdims_csv$che.de[248:507])
+```
+
+#interquartile 
+```{r}
+
+IQR(bdims_csv$che.de)
+IQR(bdims_csv$che.de[1:247])
+IQR(bdims_csv$che.de[248:507])
+```
+#grouping
+```{r}
+bdims_csv %>% group_by(sex) %>% summarise(Min = min(bdims_csv$che.de,na.rm = TRUE),
+                Q1 = quantile(bdims_csv$che.de,probs= .25,na.rm = TRUE),
+                Median = median(bdims_csv$che.de, na.rm = TRUE),
+                 Q3 = quantile(bdims_csv$che.de,probs = .75,na.rm = TRUE),
+                Max = max(bdims_csv$che.de,na.rm = TRUE),
+                Mean = mean(bdims_csv$che.de, na.rm = TRUE),
+                 SD = sd(bdims_csv$che.de, na.rm = TRUE),n = n(),
+                   Missing = sum(is.na(bdims_csv$che.de)))
+```
+
+#Distribution Fitting
+#Histogram (All) without considering bins
+```{r}
+mean_all <- mean(bdims_csv$che.de)
+sd_all <- sd(bdims_csv$che.de)
+hist(bdims_csv$che.de, xlim = c(10, 35), ylim = c(0, 0.2), col="blue", xlab="Chest Diameter(male and female)",
+                         main="Histogram of all Resondent's Chest Diameter", freq = FALSE)
+    curve(expr = dnorm(x, mean=mean_all, sd = sd_all), col="red", lwd=2, add=TRUE)
+```
+# Histogram (Male) without considering bins
+```{r}
+mean_male <- mean(bdims_csv$che.de[1:247])
+sd_male <- sd(bdims_csv$che.de[1:247])
+hist(bdims_csv$che.de[1:247], xlim = c(10, 35), ylim = c(0, 0.2), col="blue", xlab="Chest Diameter (Male)",
+                         main="Histogram of Male Respondent's Chest Diameter", freq = FALSE)
+    curve(expr = dnorm(x, mean=mean_male, sd = sd_male), col="red", lwd=2, add=TRUE)
+```
+
+```{r}
+mean_female <- mean(bdims_csv$che.de[248:507])
+sd_female <- sd(bdims_csv$che.de[248:507])
+hist(bdims_csv$che.de[248:507], xlim = c(5, 30), ylim = c(0, 0.25), col="blue", xlab="Chest Diameter (Female)",
+                         main="Histogram of Female Respondent's Chest Diameter", freq = FALSE)
+    curve(expr = dnorm(x, mean=mean_female, sd = sd_female), col="red", lwd=2, add=TRUE)
+```
