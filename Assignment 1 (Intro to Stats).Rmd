@@ -1,11 +1,10 @@
 ---
 title: "Body Mass Measurement"
-author: "Riya Minesh Amin"
+author: "Riya Minesh Amin/ s3807007"
 date: "8/30/2019"
 output:
   html_document: default
   pdf_document: default
-  word_document: default
 ---
 
 
